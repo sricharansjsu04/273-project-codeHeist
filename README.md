@@ -81,7 +81,6 @@ The code includes debugging prints and pretty-printed tables for visualizing ope
 # How to run:
 
 <code>
-Python3 pickle-dump.py
 Python3 my-node.py
 </code>
 
