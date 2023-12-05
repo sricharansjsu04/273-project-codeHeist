@@ -33,14 +33,14 @@ class Node:
     def load_mvcc_instance(self):
         with self.mvcc_lock:
             try:
-                with open('mvcc_data.pickle', 'rb') as f:
+                with open('mvcc_data_commit.pickle', 'rb') as f:
                     self.mvcc_instance = pickle.load(f)
             except FileNotFoundError:
                 self.mvcc_instance = MVCC()
 
     def save_mvcc_instance(self):
         with self.mvcc_lock:
-            with open('mvcc_data.pickle', 'wb') as f:
+            with open('mvcc_data_commit.pickle', 'wb') as f:
                 pickle.dump(self.mvcc_instance, f)
 
     def simulate_transaction(self, key, value, queue):
