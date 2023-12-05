@@ -33,9 +33,9 @@ class Node:
         self.load_mvcc_instance()
         transaction_id = self.mvcc_instance.start_transaction()
         self.mvcc_instance.write(key, value, transaction_id)
-        self.mvcc_instance.commit_transaction(transaction_id, {key: value})
+        self.mvcc_instance.commit_transaction(transaction_id, {key: value}, self.node_id)
         self.save_mvcc_instance()
-        self.log_message("Transaction", f"ID: {transaction_id}, Key: {key}, Value: {value}")
+        # self.log_message("Transaction", f"ID: {transaction_id}, Key: {key}, Value: {value}")
 
     # Simulates a read operation from the MVCC instance.
     def simulate_read(self, key):
@@ -61,14 +61,14 @@ if __name__ == "__main__":
 
     # Create processes for transactions
     processes = [
-        Process(target=node1.simulate_transaction, args=('user1', {'name': 'User-1A', 'age': 25})),
-        Process(target=node2.simulate_transaction, args=('user2', {'name': 'User-2B', 'age': 35})),
+        # Process(target=node1.simulate_transaction, args=('user1', {'name': 'User-1A', 'age': 25})),
+        # Process(target=node2.simulate_transaction, args=('user2', {'name': 'User-2B', 'age': 35})),
         Process(target=node1.simulate_transaction, args=('user1', {'name': 'User-1C', 'age': 30})),
         Process(target=node2.simulate_transaction, args=('user2', {'name': 'User-2D', 'age': 40})),
-        # Process(target=node1.simulate_read, args=('user1',)),
-        # Process(target=node2.simulate_read, args=('user2',)),
-        # Process(target=node1.simulate_read, args=('user2',)),
-        # Process(target=node2.simulate_read, args=('user1',))
+        Process(target=node1.simulate_read, args=('user1',)),
+        Process(target=node2.simulate_read, args=('user2',)),
+        Process(target=node1.simulate_read, args=('user2',)),
+        Process(target=node2.simulate_read, args=('user1',))
     ]
 
     # Start and join transaction processes
@@ -77,7 +77,7 @@ if __name__ == "__main__":
     for process in processes:
         process.join()
 
-    # Create processes for reads and writes
+    # Create processes for reads and
     processes = [
         Process(target=node1.simulate_read, args=('user1',)),
         Process(target=node2.simulate_transaction, args=('user2', {'name': 'User-2B', 'age': 35})),
