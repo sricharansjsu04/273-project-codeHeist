@@ -84,6 +84,9 @@ The code includes debugging prints and pretty-printed tables for visualizing ope
 Python3 my-node.py
 </code>
 
+<code>
+Python3 my-node-commit.py
+</code>
 
 
 
