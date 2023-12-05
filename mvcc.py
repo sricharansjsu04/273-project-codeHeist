@@ -16,16 +16,16 @@ class MVCC:
         self.versioned_data[key][transaction_id] = value
         print(f"Write: {key} at {transaction_id} = {value}")  # Debugging print
 
-    def commit_transaction(self, transaction_id, data):
+    def commit_transaction(self, transaction_id, data, node_id):
         for key, value in data.items():
             self.write(key, value, transaction_id)
-        self.log_data("Transaction Committed", {transaction_id: data})
+        self.log_data(f"Transaction Committed by Node {node_id}", {transaction_id: data})
         print(f"Commit Transaction: {transaction_id} with data {data}")  # Debugging print
 
     def read(self, key, timestamp):
         versions = self.versioned_data.get(key, {})
         print(f"Available versions for {key}: {versions}")  # Debugging print
-        latest_version_id = max((v for v in versions if v <= timestamp), default=None)
+        latest_version_id = max(versions.keys(), default=None)
         print(f"Reading {key} at {timestamp}, latest version: {latest_version_id}")  # Debugging print
         return versions.get(latest_version_id)
 
